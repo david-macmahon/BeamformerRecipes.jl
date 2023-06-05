@@ -8,11 +8,11 @@ Base.@kwdef mutable struct CalInfo <: Info
     cal_all::AbstractArray{ComplexF32,3} = Array{ComplexF32,3}(undef, 0, 0, 0)
 end # mutable struct CalInfo
 
-function to_hdf5(group::HDF5.Group, info::CalInfo; chunks=size(info.cal_B))
+function to_hdf5(group::HDF5.Group, info::CalInfo; chunk=size(info.cal_B))
     invoke(to_hdf5, Tuple{HDF5.Group, Info}, group, info;
-           cal_K=(chunks=chunks[1:2],),
-           cal_B=(chunks=chunks,),
-           cal_G=(chunks=chunks[1:2],),
-           cal_all=(chunks=chunks,)
+           cal_K=(; chunk=chunk[1:2]),
+           cal_B=(; chunk),
+           cal_G=(; chunk=chunk[1:2]),
+           cal_all=(; chunk)
           )
 end
